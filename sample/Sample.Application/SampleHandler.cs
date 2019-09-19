@@ -5,22 +5,24 @@ using System.Threading.Tasks;
 namespace Sample.Application
 {
     [MessageType("sample-message", typeof(Test))]
-    public class SampleHandler : IMessageHandler
+    public class SampleHandler : MessageHandler
     {
-        public  Task HandleAsync(object message)
+        public override Task HandleAsync<Test>(Test message)
         {
-            var testMessage = (Test)message;
             return Task.CompletedTask;
         }
     }
 
     [MessageType("sample-messagesend", typeof(MessageSend))]
-    public class SampleHandlerSend : IMessageHandler
+    public class SampleHandlerSend : MessageHandler
     {
-        public  Task HandleAsync(object message)
+        public override Task HandleAsync<MessageSend>(MessageSend message)
         {
-            var testMessage = (MessageSend)message;
+
             return Task.CompletedTask;
         }
     }
+
+
+
 }
