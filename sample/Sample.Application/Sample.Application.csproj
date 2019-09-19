@@ -16,7 +16,7 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="2.2.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Bluekiri.Consumer.Kafka\Bluekiri.Consumer.Kafka.csproj" />
     <ProjectReference Include="..\..\src\Bluekiri.Consumer\Bluekiri.Consumer.csproj" />
+    <ProjectReference Include="..\..\src\Kafka\src\Bluekiri.Consumer.Kafka\Bluekiri.Consumer.Kafka.csproj" />
   </ItemGroup>
 </Project>
