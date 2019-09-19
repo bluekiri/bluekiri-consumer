@@ -58,12 +58,13 @@ namespace Bluekiri.Consumer.Kafka
                 else
                 {
                     var headers = consumeResult.Headers;
-                    var messageInfo = new MessageInfo
+                    var messageInfo = new KafkaMessageInfo(this)
                     {
                         Key = consumeResult.Key,
-                        Message = consumeResult.Message.Value
+                        Message = consumeResult.Message.Value,
+                        Result = consumeResult
                     };
-                    messageInfo.SetResult(consumeResult);
+                    
                     foreach (var h in headers)
                     {
                         messageInfo.Headers.Add(h.Key, h.GetValueBytes());
@@ -84,18 +85,17 @@ namespace Bluekiri.Consumer.Kafka
             _consumer?.Dispose();
         }
 
-        public void CommitMessage(MessageInfo cr)
+        internal void Commit(ConsumeResult<string, byte[]> result)
         {
             try
             {
-                _consumer.Commit(cr.GetResult<ConsumeResult<string,byte[]>>());
+                _consumer.Commit(result);    
             }
-
-            catch (KafkaException e)
-            {
-                _logger.LogError(e, $"ERROR: Kafka error: {e.Error.Reason}");
-            }
-        }
+            catch (KafkaException ex)
+            {                
+                _logger.LogError(ex, $"ERROR: Kafka error: {ex.Error.Reason}");
+            }            
+        }        
     }
     
 }

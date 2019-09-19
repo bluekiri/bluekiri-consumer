@@ -80,7 +80,7 @@ namespace Bluekiri.Consumer
                     await handler.HandleAsync(result);
                     if (!_consumer.IsEnnabledAutoCommit)
                     {
-                        _consumer.CommitMessage(consumeResult);
+                        await consumeResult.CommitAsync().ConfigureAwait(false);
                     }
                 }
                 catch (Exception ex)
