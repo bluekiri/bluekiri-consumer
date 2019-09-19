@@ -74,8 +74,8 @@ namespace Bluekiri.Consumer
                     }
 
                     var result = formatter.Deserialize(consumeResult.Message, modelType);
-
-                    var handler = (IMessageHandler)GetDefaultValueForType(handlerType);
+                    
+                    var handler =(MessageHandler)GetDefaultValueForType(handlerType);
 
                     await handler.HandleAsync(result);
                     if (!_consumer.IsEnnabledAutoCommit)
