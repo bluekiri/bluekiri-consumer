@@ -5,8 +5,7 @@ namespace Bluekiri.Consumer
 {
     public interface IBrokerConsumer : IDisposable
     {
-        MessageInfo Consume(CancellationToken stopingToken);
-        void CommitMessage(MessageInfo cr);
+        MessageInfo Consume(CancellationToken stopingToken);        
         bool IsEnnabledAutoCommit { get; }
     }
 }
