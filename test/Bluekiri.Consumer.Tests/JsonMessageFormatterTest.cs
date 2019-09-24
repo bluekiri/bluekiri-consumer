@@ -44,11 +44,5 @@ namespace Bluekiri.Consumer.Tests
     {
         public string MyProperty { get; set; }
     }
-    public class HandlerTest : MessageHandler
-    {
-        public override Task HandleAsync<MessageTest>(MessageTest message)
-        {
-            return Task.CompletedTask;
-        }
-    }
+    
 }

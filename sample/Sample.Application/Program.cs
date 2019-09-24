@@ -28,11 +28,11 @@ namespace Sample.Application
                        {
                            services.AddOptions();
                            services.AddLogging();
-                           
+                           services.AddSingleton(typeof(SampleHandler));
                            services.AddConsumerConfiguration<KafkaConsumer, KafkaConsumerOptions>(o =>
                            {
                                o.Topics.Add("test-topic");
-                               o.SetProperty("bootstrap.servers", "localhost:9092");
+                               o.SetProperty("bootstrap.servers", "lgmadanydkfk02v.corp.logitravelgroup.com:9092");
                                o.SetProperty("group.id", "test_1");
                                o.SetProperty("enable.auto.commit", "false");
                            });

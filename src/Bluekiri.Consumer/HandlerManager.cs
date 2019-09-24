@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using System;
+using System.Threading.Tasks;
 
 namespace Bluekiri.Consumer
 {
@@ -11,18 +12,6 @@ namespace Bluekiri.Consumer
         {
             _handlerOptions = options.Value;
         }
-
-        public Type GetModelType(string messageType)
-        {
-            return _handlerOptions.GetModel(messageType);
-        }
-
-        public Type GetMessageHandlerType(string messageType)
-        {
-            return _handlerOptions.GetHandler(messageType);
-        }
-
-      
+        public Type GetModelType(string messageType) => _handlerOptions.GetModel(messageType);
     }
-
 }
