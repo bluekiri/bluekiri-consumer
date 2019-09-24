@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -8,6 +9,9 @@ namespace Bluekiri.Consumer
 {
     public static class ServiceCollectionExtensions
     {
+
+        private static readonly Type _handlerInterfaceTemplate = typeof(IMessageHandler<>);
+
         public static IServiceCollection AddConsumerConfiguration<TConsumer, TConsumerOptions>(this IServiceCollection services,
                                                                                                Action<TConsumerOptions> setup)
             where TConsumer : class, IBrokerConsumer
@@ -28,34 +32,76 @@ namespace Bluekiri.Consumer
             }
 
             services.AddSingleton<IBrokerConsumer, TConsumer>();
-
             services.AddHostedService<ConsumerService<TConsumerOptions>>();
+            services.AddSingleton<IHandlerManager, HandlerManager>();
+            services.AddSingleton<IHandlerMessageFactory, HandlerMessageFactory>();
+            services.AddTransient<HandlerFactory>(p => p.GetService);
 
             return services;
         }
 
         private static void AddHandlers(this IServiceCollection services)
         {
+            var listHandlersType = new List<Type>();
+            var interfaces = new List<Type>();
+
+            var types = Assembly.GetEntryAssembly().GetTypes()
+                 .Where(t => t.GetCustomAttribute<MessageTypeAttribute>() != null)
+                 .ToDictionary(t => t.GetCustomAttribute<MessageTypeAttribute>().Name,
+                 t =>
+                     new
+                     {
+                         HandlerType = t,
+                         t.GetCustomAttribute<MessageTypeAttribute>().ModelType
+                     }
+                 );
+
             services.Configure<HandlerOptions>(o =>
             {
-                var types = Assembly.GetEntryAssembly().GetTypes()
-                    .Where(t => t.GetCustomAttribute<MessageTypeAttribute>() != null)
-                    .ToDictionary(t => t.GetCustomAttribute<MessageTypeAttribute>().Name,
-                    t =>
-                        new
-                        {
-                            HandlerType = t,
-                            t.GetCustomAttribute<MessageTypeAttribute>().ModelType
-                        }
-                    );
-
                 foreach (var type in types)
                 {
-                    o.AddHandler(type.Key, type.Value.HandlerType, type.Value.ModelType);
+                    o.AddModel(type.Key,  type.Value.ModelType);
                 }
             });
+            foreach(var type in types)
+            {
+                listHandlersType.Add(type.Value.HandlerType);
 
-            services.AddSingleton<IHandlerManager, HandlerManager>();
+                var interfaceTypes = Enumerable.ToArray<Type>(type.Value.HandlerType.GetGenericInterfacesForMessageHandler());
+
+                foreach (var interfaceType in interfaceTypes)
+                {
+                    interfaces.Add(interfaceType);
+                }
+            }
+
+            foreach(var @interface in interfaces)
+            {
+                var exactMatches = listHandlersType.Where(x => x.CanBeCastTo(@interface)).ToList();
+                foreach (var type in exactMatches)
+                {
+                    services.AddSingleton(@interface, type);
+                }
+            }
+        }
+
+
+        private static IEnumerable<Type> GetGenericInterfacesForMessageHandler(this Type type)
+        {
+            foreach (var interfaceType in type.GetInterfaces()
+                .Where(t => t.GetTypeInfo().IsGenericType && (t.GetGenericTypeDefinition() == _handlerInterfaceTemplate)))
+            {
+                yield return interfaceType;
+            }
+        }
+
+        private static bool CanBeCastTo(this Type pluggedType, Type pluginType)
+        {
+            if (pluggedType == null) return false;
+
+            if (pluggedType == pluginType) return true;
+
+            return pluginType.GetTypeInfo().IsAssignableFrom(pluggedType.GetTypeInfo());
         }
     }
 }

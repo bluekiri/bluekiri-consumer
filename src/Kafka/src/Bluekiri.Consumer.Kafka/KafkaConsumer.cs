@@ -15,7 +15,7 @@ namespace Bluekiri.Consumer.Kafka
         private readonly ILogger<KafkaConsumer> _logger;
         private readonly ConsumerConfig _consumerConfig;
 
-        public bool IsEnnabledAutoCommit { get; }
+        public bool IsEnabledAutoCommit { get; }
 
         public KafkaConsumer(IOptions<KafkaConsumerOptions> options, ILogger<KafkaConsumer> logger)
         {
@@ -28,7 +28,7 @@ namespace Bluekiri.Consumer.Kafka
                 EnablePartitionEof = true
             };
 
-            IsEnnabledAutoCommit = _consumerConfig.EnableAutoCommit ?? true;
+            IsEnabledAutoCommit = _consumerConfig.EnableAutoCommit ?? true;
 
             _consumer = new ConsumerBuilder<string, byte[]>(_consumerConfig)
                 .SetErrorHandler((_, e) => _logger.LogError($"Error: {e.Reason}"))
@@ -64,7 +64,7 @@ namespace Bluekiri.Consumer.Kafka
                         Message = consumeResult.Message.Value,
                         Result = consumeResult
                     };
-                    
+
                     foreach (var h in headers)
                     {
                         messageInfo.Headers.Add(h.Key, h.GetValueBytes());
@@ -89,13 +89,13 @@ namespace Bluekiri.Consumer.Kafka
         {
             try
             {
-                _consumer.Commit(result);    
+                _consumer.Commit(result);
             }
             catch (KafkaException ex)
-            {                
+            {
                 _logger.LogError(ex, $"ERROR: Kafka error: {ex.Error.Reason}");
-            }            
-        }        
+            }
+        }
     }
-    
+
 }

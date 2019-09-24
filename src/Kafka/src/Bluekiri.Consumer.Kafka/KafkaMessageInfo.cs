@@ -18,5 +18,8 @@ namespace Bluekiri.Consumer.Kafka
             _consumer.Commit(Result);            
             return Task.CompletedTask;
         }
+
     }
+
+
 }

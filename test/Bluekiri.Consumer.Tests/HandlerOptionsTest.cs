@@ -11,7 +11,7 @@ namespace Bluekiri.Consumer.Tests
         {
             // Arrange
             var options = new HandlerOptions();
-            options.AddHandler("test", typeof(HandlerTest), typeof(MessageTest));
+            
             // Act
             var modelType = options.GetModel("test");
 

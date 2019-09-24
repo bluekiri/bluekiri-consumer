@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,17 +16,20 @@ namespace Bluekiri.Consumer
     {
         private readonly IBrokerConsumer _consumer;
         private readonly IHandlerManager _handlerManager;
+        private readonly IHandlerMessageFactory _factory;
         private readonly IEnumerable<IMessageFormatter> _formatters;
         private readonly ILogger _logger;
 
         public ConsumerService(
             IBrokerConsumer consumer,
             IHandlerManager handlerManager,
+            IHandlerMessageFactory factory,
             IEnumerable<IMessageFormatter> formatters,
             ILogger<ConsumerService<TConsumerOptions>> logger)
         {
             _consumer = consumer;
             _handlerManager = handlerManager;
+            _factory = factory;
             _formatters = formatters;
             _logger = logger;
         }
@@ -66,19 +72,11 @@ namespace Bluekiri.Consumer
                         _logger.LogError($"There is not a valid model for messages of type {messageType}");
                         continue;
                     }
-                    var handlerType = _handlerManager.GetMessageHandlerType(messageType);
-                    if (handlerType is null)
-                    {
-                        _logger.LogError($"There is not a valid handler for handlers of type {messageType}");
-                        continue;
-                    }
-
                     var result = formatter.Deserialize(consumeResult.Message, modelType);
-                    
-                    var handler =(MessageHandler)GetDefaultValueForType(handlerType);
+                    await _factory.Publish(result, stoppingToken).ConfigureAwait(false);
 
-                    await handler.HandleAsync(result);
-                    if (!_consumer.IsEnnabledAutoCommit)
+                    //await handler.HandleAsync(result);
+                    if (!_consumer.IsEnabledAutoCommit)
                     {
                         await consumeResult.CommitAsync().ConfigureAwait(false);
                     }
@@ -90,19 +88,15 @@ namespace Bluekiri.Consumer
             }
         }
 
-        private object GetDefaultValueForType(Type handlerType)
-        {
-            if (handlerType == null)
-            {
-                throw new ArgumentNullException(nameof(handlerType));
-            }
-            return Activator.CreateInstance(handlerType);
-        }
 
         public override void Dispose()
         {
-            _consumer?.Dispose();
+            // _consumer?.Dispose();
             base.Dispose();
         }
     }
+
+
 }
+
+
