@@ -73,7 +73,7 @@ namespace Bluekiri.Consumer
                         continue;
                     }
                     var result = formatter.Deserialize(consumeResult.Message, modelType);
-                    await _factory.Publish(result, stoppingToken).ConfigureAwait(false);
+                    await _factory.Execute(result, stoppingToken).ConfigureAwait(false);
 
                     //await handler.HandleAsync(result);
                     if (!_consumer.IsEnabledAutoCommit)

@@ -14,7 +14,7 @@ namespace Bluekiri.Consumer
         {
             _handlerFactory = handlerFactory;
         }
-        public Task Publish(object message, CancellationToken cancellationToken = default)
+        public Task Execute(object message, CancellationToken cancellationToken = default)
         {
             if (message is IMessage instance)
             {

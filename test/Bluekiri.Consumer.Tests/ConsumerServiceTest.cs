@@ -33,7 +33,7 @@ namespace Bluekiri.Consumer.Tests
             mockFormatter.Setup(s => s.Deserialize(It.IsAny<byte[]>(), It.IsAny<Type>())).Returns(new ModelExpected { TestMessage = "test" });
 
             var mockFactory = new Mock<IHandlerMessageFactory>();
-            mockFactory.Setup(s => s.Publish(It.IsAny<object>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
+            mockFactory.Setup(s => s.Execute(It.IsAny<object>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
             var mockLogger = new Mock<AbstractLogger<ConsumerService<FakeConsumeOptions>>>();
 
 
