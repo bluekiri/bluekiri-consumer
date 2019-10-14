@@ -4,6 +4,9 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Bluekiri.Consumer.Kafka</AssemblyName>
     <RootNamespace>Bluekiri.Consumer.Kafka</RootNamespace>
+    <PackageIconUrl>https://bluekiri.com/images/ms-icon-70x70.png</PackageIconUrl>
+    <VersionPrefix>0.0.1</VersionPrefix>
+    <Company>Bluekiri</Company>
   </PropertyGroup>
 
   <ItemGroup>
