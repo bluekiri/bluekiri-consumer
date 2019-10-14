@@ -11,12 +11,12 @@ namespace Bluekiri.Consumer.Tests
         {
             // Arrange
             var options = new HandlerOptions();
-            
+            options.AddModel("test", typeof(MessageTest));
             // Act
             var modelType = options.GetModel("test");
 
             // Assert
-            Assert.IsInstanceOfType(modelType, typeof(MessageTest));
+            Assert.IsInstanceOfType(new MessageTest(),modelType);
         }
 
     }

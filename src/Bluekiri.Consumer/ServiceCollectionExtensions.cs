@@ -67,9 +67,7 @@ namespace Bluekiri.Consumer
             {
                 listHandlersType.Add(type.Value.HandlerType);
 
-                var interfaceTypes = Enumerable.ToArray<Type>(type.Value.HandlerType.GetGenericInterfacesForMessageHandler());
-
-                foreach (var interfaceType in interfaceTypes)
+                foreach (var interfaceType in type.Value.HandlerType.GetGenericInterfacesForMessageHandler())
                 {
                     interfaces.Add(interfaceType);
                 }
@@ -95,13 +93,13 @@ namespace Bluekiri.Consumer
             }
         }
 
-        private static bool CanBeCastTo(this Type pluggedType, Type pluginType)
+        private static bool CanBeCastTo(this Type expectedType, Type requestType)
         {
-            if (pluggedType == null) return false;
+            if (expectedType is null) return false;
 
-            if (pluggedType == pluginType) return true;
+            if (expectedType == requestType) return true;
 
-            return pluginType.GetTypeInfo().IsAssignableFrom(pluggedType.GetTypeInfo());
+            return requestType.GetTypeInfo().IsAssignableFrom(expectedType.GetTypeInfo());
         }
     }
 }

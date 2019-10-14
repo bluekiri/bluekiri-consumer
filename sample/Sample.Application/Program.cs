@@ -35,6 +35,7 @@ namespace Sample.Application
                                o.SetProperty("bootstrap.servers", "lgmadanydkfk02v.corp.logitravelgroup.com:9092");
                                o.SetProperty("group.id", "test_1");
                                o.SetProperty("enable.auto.commit", "false");
+                               
                            });
                        }).ConfigureLogging(c =>
                        {
