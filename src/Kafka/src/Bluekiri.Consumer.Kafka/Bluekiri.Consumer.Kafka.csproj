@@ -10,21 +10,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Bluekiri.Consumer" Version="0.0.1-pre-20191014-6" />
     <PackageReference Include="Confluent.Kafka" Version="1.1.0" />
     
     <PackageReference Include="Microsoft.Extensions.Logging" Version="3.0.0" />
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Bluekiri.Consumer\Bluekiri.Consumer.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Microsoft.Extensions.DependencyInjection">
-      <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.extensions.dependencyinjection\2.2.0\lib\netcoreapp2.0\Microsoft.Extensions.DependencyInjection.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
-
-
 </Project>
