@@ -10,6 +10,6 @@
     <PackageReference Include="Bluekiri.Consumer" Version="0.0.1-pre-20191014-6" />
     <PackageReference Include="Confluent.Kafka" Version="1.1.0" />
     
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="3.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="2.2.0" />
   </ItemGroup>
 </Project>
