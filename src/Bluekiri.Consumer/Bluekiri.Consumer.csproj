@@ -1,13 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;netcoreapp3.1;net6.0</TargetFrameworks>
     <AssemblyName>Bluekiri.Consumer</AssemblyName>
     <RootNamespace>Bluekiri.Consumer</RootNamespace>
-    <PackageIconUrl>https://bluekiri.com/images/ms-icon-70x70.png</PackageIconUrl>
-    <VersionPrefix>0.0.1</VersionPrefix>
     <Company>Bluekiri</Company>
+    <PackageIcon>images\logo.png</PackageIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\images\logo.png" Pack="true" Visible="false" PackagePath="images\logo.png"/>
+  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="2.2.0" />

@@ -7,11 +7,21 @@ using System.Reflection;
 
 namespace Bluekiri.Consumer
 {
+    /// <summary>
+    /// Extensions for IOC
+    /// </summary>
     public static class ServiceCollectionExtensions
     {
 
         private static readonly Type _handlerInterfaceTemplate = typeof(IMessageHandler<>);
-
+        /// <summary>
+        /// Extension for confirgure the consumer on IoC.
+        /// </summary>
+        /// <typeparam name="TConsumer"><see cref="IBrokerConsumer"/></typeparam>
+        /// <typeparam name="TConsumerOptions"><see cref="ConsumerOptions"/></typeparam>
+        /// <param name="services"></param>
+        /// <param name="setup"><see cref="ConsumerOptions"/></param>
+        /// <returns><see cref="IServiceCollection"/></returns>
         public static IServiceCollection AddConsumerConfiguration<TConsumer, TConsumerOptions>(this IServiceCollection services,
                                                                                                Action<TConsumerOptions> setup)
             where TConsumer : class, IBrokerConsumer

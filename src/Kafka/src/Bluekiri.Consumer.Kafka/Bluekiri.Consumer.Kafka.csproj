@@ -1,11 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;netcoreapp3.1;net6.0</TargetFrameworks>
     <AssemblyName>Bluekiri.Consumer.Kafka</AssemblyName>
     <RootNamespace>Bluekiri.Consumer.Kafka</RootNamespace>
-    <PackageIconUrl>https://bluekiri.com/images/ms-icon-70x70.png</PackageIconUrl>
-    <VersionPrefix>0.0.1</VersionPrefix>
     <Company>Bluekiri</Company>
   </PropertyGroup>
 
