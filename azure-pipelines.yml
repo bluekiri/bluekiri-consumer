@@ -1,0 +1,59 @@
+trigger:
+  - master
+pr:
+  branches:
+    include: 
+    - '*'
+
+pool:
+  name: BKHosted
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+- task: UseDotNet@2
+  displayName: 'Use .NET 6'
+  
+  inputs:
+    version: 6.0.x
+
+    
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet build'
+  continueOnError: false
+  inputs:
+    projects: '**/*.sln'
+    arguments: '-c release'
+    
+- task: DotNetCoreCLI@2
+  displayName: Test
+  continueOnError: false
+  inputs:
+    command: test
+    projects: '**/*.sln'
+    arguments: '--configuration $(BuildConfiguration) --no-build /p:CollectCoverage=true "/p:CoverletOutputFormat=\"opencover,lcov\"" /p:CoverletOutputDirectory=$(Build.SourcesDirectory)\TestResults\Coverage'
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet pack debug'
+  condition: contains(variables['build.sourceBranch'], 'refs/heads/master')
+  continueOnError: false
+  inputs:
+    command: custom
+    projects: 'src/**/*.csproj'
+    custom: pack
+    arguments: '-c debug --include-symbols --include-source --version-suffix "pre-$(Build.BuildNumber)" -o $(build.artifactstagingdirectory)\packages\debug'
+
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet pack release'
+  condition: contains(variables['build.sourceBranch'], 'refs/heads/master')
+  inputs:
+    command: custom
+    projects: 'src/**/*.csproj'
+    custom: pack
+    arguments: '--output $(build.artifactstagingdirectory)\packages\release --include-symbols --include-source'
+
+- task: PublishBuildArtifacts@1
+  condition: contains(variables['build.sourceBranch'], 'refs/heads/main')
+  displayName: 'Publish Artifact: drop'
