@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Bluekiri.Consumer.Abstractions;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
@@ -14,7 +15,7 @@ namespace Bluekiri.Consumer
         {
             _handlerFactory = handlerFactory;
         }
-        public Task Execute(object message, CancellationToken cancellationToken = default)
+        public Task ExecuteAsync(object message, CancellationToken cancellationToken = default)
         {
             if (message is IMessage instance)
             {

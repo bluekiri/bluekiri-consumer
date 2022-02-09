@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Bluekiri.Consumer.Abstractions;
 using Confluent.Kafka;
 
 namespace Bluekiri.Consumer.Kafka

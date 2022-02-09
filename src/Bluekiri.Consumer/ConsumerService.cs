@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Bluekiri.Consumer.Abstractions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace Bluekiri.Consumer
 {
+    /// <summary>
+    /// Worker for consume.
+    /// </summary>
+    /// <typeparam name="TConsumerOptions"><see cref="ConsumerOptions"/></typeparam>
     public class ConsumerService<TConsumerOptions> : BackgroundService where TConsumerOptions : ConsumerOptions, new()
     {
         private readonly IBrokerConsumer _consumer;
@@ -20,6 +22,17 @@ namespace Bluekiri.Consumer
         private readonly IEnumerable<IMessageFormatter> _formatters;
         private readonly ILogger _logger;
 
+        private const string ContentType = "ContentType";
+        private const string MessageType = "MessageType";
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="consumer"><see cref="IBrokerConsumer"/></param>
+        /// <param name="handlerManager"><see cref="IHandlerManager"/></param>
+        /// <param name="factory"><see cref="IHandlerMessageFactory"/></param>
+        /// <param name="formatters"><see cref="IEnumerable{IMessageFormatter}"/></param>
+        /// <param name="logger"><see cref="ILogger{ConsumerService}"/></param>
         public ConsumerService(
             IBrokerConsumer consumer,
             IHandlerManager handlerManager,
@@ -33,7 +46,10 @@ namespace Bluekiri.Consumer
             _formatters = formatters;
             _logger = logger;
         }
-
+        /// <summary>
+        /// Backgroundservice override.
+        /// </summary>
+        /// <param name="stoppingToken"><see cref="CancellationToken"/></param>
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             while (!stoppingToken.IsCancellationRequested)
@@ -42,10 +58,19 @@ namespace Bluekiri.Consumer
                 {
                     var consumeResult = _consumer.Consume(stoppingToken);
                     if (consumeResult is null) continue;
+                    if (!consumeResult.Headers.ContainsKey(ContentType))
+                    {
+                        _logger.LogError("Headers not contains key ContentType");
+                        continue;
+                    }
+                    if (!consumeResult.Headers.ContainsKey(MessageType))
+                    {
+                        _logger.LogError("Headers not contains key MessageType");
+                        continue;
+                    }
 
-
-                    var contentType = Encoding.UTF8.GetString(consumeResult.Headers["ContentType"]);
-                    var messageType = Encoding.UTF8.GetString(consumeResult.Headers["MessageType"]);
+                    var contentType = Encoding.UTF8.GetString(consumeResult.Headers[ContentType]);
+                    var messageType = Encoding.UTF8.GetString(consumeResult.Headers[MessageType]);
 
                     if (string.IsNullOrWhiteSpace(contentType))
                     {
@@ -59,7 +84,7 @@ namespace Bluekiri.Consumer
                         continue;
                     }
 
-                    var formatter = _formatters.FirstOrDefault(f => f.ContentType.Equals(contentType));
+                    var formatter = _formatters.Where(f => f.ContentType.Equals(contentType)).FirstOrDefault();
 
                     if (formatter is null)
                     {
@@ -73,9 +98,9 @@ namespace Bluekiri.Consumer
                         continue;
                     }
                     var result = formatter.Deserialize(consumeResult.Message, modelType);
-                    await _factory.Execute(result, stoppingToken).ConfigureAwait(false);
+                    await _factory.ExecuteAsync(result, stoppingToken).ConfigureAwait(false);
 
-                    //await handler.HandleAsync(result);
+
                     if (!_consumer.IsEnabledAutoCommit)
                     {
                         await consumeResult.CommitAsync().ConfigureAwait(false);
@@ -88,10 +113,12 @@ namespace Bluekiri.Consumer
             }
         }
 
-
+        /// <summary>
+        /// base dispose
+        /// </summary>
         public override void Dispose()
         {
-            // _consumer?.Dispose();
+            _consumer?.Dispose();
             base.Dispose();
         }
     }

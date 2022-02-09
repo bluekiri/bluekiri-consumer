@@ -1,4 +1,5 @@
-﻿using Confluent.Kafka;
+﻿using Bluekiri.Consumer.Abstractions;
+using Confluent.Kafka;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace Bluekiri.Consumer.Kafka
         private readonly IConsumer<string, byte[]> _consumer;
 
         private readonly IList<string> _topics;
-        private readonly IList<KeyValuePair<string, string>> _properties;
+        private readonly IDictionary<string, string> _properties;
         private readonly ILogger<KafkaConsumer> _logger;
         private readonly ConsumerConfig _consumerConfig;
 

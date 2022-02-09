@@ -5,6 +5,6 @@ namespace Bluekiri.Consumer
 {
     public interface IHandlerMessageFactory
     {
-        Task Execute(object message, CancellationToken cancellationToken = default);
+        Task ExecuteAsync(object message, CancellationToken cancellationToken = default);
     }
 }

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29230.47
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F54E4B43-2123-4E84-948F-646FF336BCA3}"
 EndProject
@@ -19,7 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bluekiri.Consumer.Tests", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bluekiri.Consumer.Kafka", "src\Kafka\src\Bluekiri.Consumer.Kafka\Bluekiri.Consumer.Kafka.csproj", "{B9783E86-0FD9-49DA-9C3D-365C3939C47F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.Application.Handlers", "sample\Sample.Application.Handlers\Sample.Application.Handlers.csproj", "{4607D8F3-B373-46E9-A99B-F992AB42A671}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sample.Application.Handlers", "sample\Sample.Application.Handlers\Sample.Application.Handlers.csproj", "{4607D8F3-B373-46E9-A99B-F992AB42A671}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bluekiri.Consumer.Abstractions", "src\Bluekiri.Consumer.Abstractions\Bluekiri.Consumer.Abstractions.csproj", "{78E648B0-C786-4560-B70A-6C4D57112CAC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -91,6 +93,18 @@ Global
 		{4607D8F3-B373-46E9-A99B-F992AB42A671}.Release|x64.Build.0 = Release|Any CPU
 		{4607D8F3-B373-46E9-A99B-F992AB42A671}.Release|x86.ActiveCfg = Release|Any CPU
 		{4607D8F3-B373-46E9-A99B-F992AB42A671}.Release|x86.Build.0 = Release|Any CPU
+		{78E648B0-C786-4560-B70A-6C4D57112CAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78E648B0-C786-4560-B70A-6C4D57112CAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78E648B0-C786-4560-B70A-6C4D57112CAC}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{78E648B0-C786-4560-B70A-6C4D57112CAC}.Debug|x64.Build.0 = Debug|Any CPU
+		{78E648B0-C786-4560-B70A-6C4D57112CAC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{78E648B0-C786-4560-B70A-6C4D57112CAC}.Debug|x86.Build.0 = Debug|Any CPU
+		{78E648B0-C786-4560-B70A-6C4D57112CAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78E648B0-C786-4560-B70A-6C4D57112CAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78E648B0-C786-4560-B70A-6C4D57112CAC}.Release|x64.ActiveCfg = Release|Any CPU
+		{78E648B0-C786-4560-B70A-6C4D57112CAC}.Release|x64.Build.0 = Release|Any CPU
+		{78E648B0-C786-4560-B70A-6C4D57112CAC}.Release|x86.ActiveCfg = Release|Any CPU
+		{78E648B0-C786-4560-B70A-6C4D57112CAC}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -102,6 +116,7 @@ Global
 		{880B79AF-8F33-4FCD-A748-5040D6AD9ACB} = {0BE61F1D-882E-4A3A-8705-17872C1F670D}
 		{B9783E86-0FD9-49DA-9C3D-365C3939C47F} = {F54E4B43-2123-4E84-948F-646FF336BCA3}
 		{4607D8F3-B373-46E9-A99B-F992AB42A671} = {E8A4DB02-4153-43FC-9004-74129A20A957}
+		{78E648B0-C786-4560-B70A-6C4D57112CAC} = {F54E4B43-2123-4E84-948F-646FF336BCA3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {544560F1-0479-4BFA-8243-E45D885B689C}

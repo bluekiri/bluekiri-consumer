@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Bluekiri.Consumer.Abstractions;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
@@ -33,8 +35,8 @@ namespace Bluekiri.Consumer.Tests
             mockFormatter.Setup(s => s.Deserialize(It.IsAny<byte[]>(), It.IsAny<Type>())).Returns(new ModelExpected { TestMessage = "test" });
 
             var mockFactory = new Mock<IHandlerMessageFactory>();
-            mockFactory.Setup(s => s.Execute(It.IsAny<object>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
-            var mockLogger = new Mock<AbstractLogger<ConsumerService<FakeConsumeOptions>>>();
+            mockFactory.Setup(s => s.ExecuteAsync(It.IsAny<object>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
+            var mockLogger = new NullLogger<ConsumerService<FakeConsumeOptions>>();
 
 
 
@@ -42,14 +44,11 @@ namespace Bluekiri.Consumer.Tests
                 mockHandlerManager.Object,
                 mockFactory.Object,
                 new List<IMessageFormatter> { mockFormatter.Object },
-                mockLogger.Object);
+                mockLogger);
 
             var cts = new CancellationTokenSource(1000);
             CancellationToken token = cts.Token;
             await consume.ExposedExecuteAsync(token);
-
-
-
         }
 
         private class ConsumeResponseFake : MessageInfo
@@ -88,16 +87,5 @@ namespace Bluekiri.Consumer.Tests
             return base.ExecuteAsync(cancellationToken);
         }
     }
-    public abstract class AbstractLogger<T> : ILogger<T>
-    {
-        public IDisposable BeginScope<TState>(TState state)
-            => throw new NotImplementedException();
 
-        public bool IsEnabled(LogLevel logLevel) => true;
-
-        public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
-            => Log(logLevel, exception, formatter(state, exception));
-
-        public abstract void Log(LogLevel logLevel, Exception ex, string information);
-    }
 }
