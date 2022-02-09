@@ -9,14 +9,14 @@ namespace Bluekiri.Consumer.Kafka
     public class KafkaConsumerOptions : ConsumerOptions
     {
         internal IList<string> Topics;
-        internal IList<KeyValuePair<string, string>> KafkaConfig;
+        internal IDictionary<string, string> KafkaConfig;
         /// <summary>
         /// Constructor.
         /// </summary>
         public KafkaConsumerOptions()
         {
             Topics = new List<string>();
-            KafkaConfig = new List<KeyValuePair<string, string>>();
+            KafkaConfig = new Dictionary<string, string>();
         }
         /// <summary>
         /// Set the configuration for the consumer.
@@ -25,7 +25,7 @@ namespace Bluekiri.Consumer.Kafka
         /// <param name="value">Configuration value</param>
         public void SetProperty(string key, string value)
         {
-            KafkaConfig.Add(new KeyValuePair<string, string>(key, value));
+            KafkaConfig.Add(key, value);
         }
         /// <summary>
         /// Add a topic into topics consumer list.
