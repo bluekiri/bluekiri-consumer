@@ -1,26 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Bluekiri.Consumer
+namespace Bluekiri.Consumer.Abstractions
 {
     /// <summary>
     /// Consumer options configuration.
     /// </summary>
     public class ConsumerOptions
     {
-        internal IList<Type> MessageFormatters { get; }
-      
-        
+        private readonly IList<Type> _messageFormatters;
+        /// <summary>
+        /// Readonly list of added formatters
+        /// </summary>
+        public IReadOnlyList<Type> MessageFormatters => (IReadOnlyList<Type>)_messageFormatters;
+
         /// <summary>
         /// Constructor.
         /// Adds Default JsonMessageFormatter
         /// </summary>
         public ConsumerOptions()
         {
-            MessageFormatters = new List<Type>
-            {
-                typeof(JsonMessageFormatter)
-            };
+            _messageFormatters = new List<Type>();
+           
         }
         /// <summary>
         /// Adds new formatter to list.
@@ -28,7 +29,7 @@ namespace Bluekiri.Consumer
         /// <typeparam name="T"><see cref="IMessageFormatter"/></typeparam>
         public void AddMessageFormatter<T>() where T : IMessageFormatter
         {
-            MessageFormatters.Add(typeof(T));
+            _messageFormatters.Add(typeof(T));
         }
     }
 }

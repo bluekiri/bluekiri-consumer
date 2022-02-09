@@ -1,4 +1,5 @@
 ﻿using Bluekiri.Consumer;
+using Bluekiri.Consumer.Abstractions;
 using System;
 
 namespace Sample.Application

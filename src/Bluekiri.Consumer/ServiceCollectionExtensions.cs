@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Bluekiri.Consumer.Abstractions;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -36,6 +37,9 @@ namespace Bluekiri.Consumer
             var options = Options.Create(consumeroptions);
             services.AddSingleton(options);
 
+            // adds default formatter (Json).
+            consumeroptions.AddMessageFormatter<JsonMessageFormatter>();
+
             foreach (var formatter in consumeroptions.MessageFormatters)
             {
                 services.AddSingleton(typeof(IMessageFormatter), formatter);
@@ -70,10 +74,10 @@ namespace Bluekiri.Consumer
             {
                 foreach (var type in types)
                 {
-                    o.AddModel(type.Key,  type.Value.ModelType);
+                    o.AddModel(type.Key, type.Value.ModelType);
                 }
             });
-            foreach(var type in types)
+            foreach (var type in types)
             {
                 listHandlersType.Add(type.Value.HandlerType);
 
@@ -83,7 +87,7 @@ namespace Bluekiri.Consumer
                 }
             }
 
-            foreach(var @interface in interfaces)
+            foreach (var @interface in interfaces)
             {
                 var exactMatches = listHandlersType.Where(x => x.CanBeCastTo(@interface)).ToList();
                 foreach (var type in exactMatches)

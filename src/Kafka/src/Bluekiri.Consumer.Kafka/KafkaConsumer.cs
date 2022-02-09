@@ -1,4 +1,5 @@
-﻿using Confluent.Kafka;
+﻿using Bluekiri.Consumer.Abstractions;
+using Confluent.Kafka;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Collections.Generic;

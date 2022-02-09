@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Bluekiri.Consumer.Abstractions;
+using System.Collections.Generic;
 
 namespace Bluekiri.Consumer.Kafka
 {
